@@ -1,0 +1,6 @@
+@Alice.Backend_HostAddress = http://localhost:5235
+
+GET {{Alice.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
