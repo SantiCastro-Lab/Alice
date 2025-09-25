@@ -19,7 +19,11 @@ builder.Services.AddScoped(typeof(Alice.Backend.Repositories.Interfaces.IGeneric
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IStatesRepository, StatesRepository>();
+
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
+builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
+
 builder.Services.AddTransient<SeedDb>();
 
 var app = builder.Build();
