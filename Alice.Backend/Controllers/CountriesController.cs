@@ -10,8 +10,34 @@ namespace Alice.Backend.Controllers;
 [Route("api/[controller]")]
 public class CountriesController : GenericController<Country>
 {
-    public CountriesController(IGenericUnitOfWork<Country> unitOfWork) : base(unitOfWork)
+    private readonly ICountriesUnitOfWork _countriesUnitOfWork;
+
+    public CountriesController(IGenericUnitOfWork<Country> unitOfWork, ICountriesUnitOfWork countriesUnitOfWork)
+        : base(unitOfWork)
     {
+        _countriesUnitOfWork = countriesUnitOfWork;
+    }
+
+    [HttpGet]
+    public override async Task<IActionResult> GetAllAsync()
+    {
+        var response = await _countriesUnitOfWork.GetAllAsync();
+        if (response.IsSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return BadRequest(response.Message);
+    }
+
+    [HttpGet("{id}")]
+    public override async Task<IActionResult> GetByIdAsync(int id)
+    {
+        var response = await _countriesUnitOfWork.GetByIdAsync(id);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return NotFound(response.Message);
     }
 }
 

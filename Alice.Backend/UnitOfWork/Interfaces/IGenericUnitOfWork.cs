@@ -1,4 +1,5 @@
-﻿using Alice.Shared.Responses;
+﻿using Alice.Shared.Entities;
+using Alice.Shared.Responses;
 
 namespace Alice.Backend.UnitOfWork.Interfaces;
 
@@ -8,7 +9,7 @@ public interface IGenericUnitOfWork<T> where T : class
 
     Task<ActionResponse<T?>> GetByIdAsync(int id);
 
-    Task<ActionResponse<T>> AddAsync(T entity);
+    Task<ActionResponse<T?>> AddAsync(T entity);
 
     Task<ActionResponse<T?>> UpdateAsync(int id, T entity);
 
