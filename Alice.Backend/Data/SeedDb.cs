@@ -1,4 +1,5 @@
 ﻿using Alice.Shared.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alice.Backend.Data;
 
@@ -14,8 +15,18 @@ public class SeedDb
     public async Task SeedAsync()
     {
         await _context.Database.EnsureCreatedAsync();
+        await CheckCountriesFullAsync();
         await CheckCountriesAsync();
         await CheckCategoriesAsync();
+    }
+
+    private async Task CheckCountriesFullAsync()
+    {
+        if (!_context.Countries.Any())
+        {
+            var countriesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
+            await _context.Database.ExecuteSqlRawAsync(countriesSQLScript);
+        }
     }
 
     private async Task CheckCountriesAsync()

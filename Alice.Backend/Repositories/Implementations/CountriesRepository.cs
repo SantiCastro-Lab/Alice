@@ -1,5 +1,7 @@
 ﻿using Alice.Backend.Data;
+using Alice.Backend.Helpers;
 using Alice.Backend.Repositories.Interfaces;
+using Alice.Shared.DTOs;
 using Alice.Shared.Entities;
 using Alice.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +20,7 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
     public override async Task<ActionResponse<IEnumerable<Country>>> GetAllAsync()
     {
         var countries = await _context.Countries
-            .Include(c => c.States)
+            .OrderBy(c => c.Name)
             .ToListAsync();
         return new ActionResponse<IEnumerable<Country>>
         {
@@ -44,6 +46,22 @@ public class CountriesRepository : GenericRepository<Country>, ICountriesReposit
         {
             IsSuccess = true,
             Result = country
+        };
+    }
+
+    public override async Task<ActionResponse<IEnumerable<Country>>> GetPagedAsync(PaginationDTO pagination)
+    {
+        var queryable = _context.Countries
+            .Include(c=> c.States)
+            .AsQueryable();
+
+        return new ActionResponse<IEnumerable<Country>>
+        {
+            IsSuccess = true,
+            Result = await queryable
+                .OrderBy(x=> x.Name)
+                .Paginate(pagination)
+                .ToListAsync()
         };
     }
 }

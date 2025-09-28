@@ -1,5 +1,6 @@
 ﻿using Alice.Backend.Data;
 using Alice.Backend.UnitOfWork.Interfaces;
+using Alice.Shared.DTOs;
 using Alice.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,17 @@ public class CountriesController : GenericController<Country>
             return Ok(response.Result);
         }
         return NotFound(response.Message);
+    }
+
+    [HttpGet("paginated")]
+    public override async Task<IActionResult> GetPagedAsync([FromQuery] PaginationDTO pagination)
+    {
+        var response = await _countriesUnitOfWork.GetPagedAsync(pagination);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return BadRequest(response.Message);
     }
 }
 

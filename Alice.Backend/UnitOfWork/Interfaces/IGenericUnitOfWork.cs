@@ -1,4 +1,5 @@
-﻿using Alice.Shared.Entities;
+﻿using Alice.Shared.DTOs;
+using Alice.Shared.Entities;
 using Alice.Shared.Responses;
 
 namespace Alice.Backend.UnitOfWork.Interfaces;
@@ -8,6 +9,10 @@ public interface IGenericUnitOfWork<T> where T : class
     Task<ActionResponse<IEnumerable<T>>> GetAllAsync();
 
     Task<ActionResponse<T?>> GetByIdAsync(int id);
+
+    Task<ActionResponse<IEnumerable<T>>> GetPagedAsync(PaginationDTO pagination);
+
+    Task<ActionResponse<int>> GetCountAsync(PaginationDTO pagination);
 
     Task<ActionResponse<T?>> AddAsync(T entity);
 

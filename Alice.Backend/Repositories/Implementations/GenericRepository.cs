@@ -1,5 +1,7 @@
 ﻿using Alice.Backend.Data;
+using Alice.Backend.Helpers;
 using Alice.Backend.Repositories.Interfaces;
+using Alice.Shared.DTOs;
 using Alice.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
 
@@ -133,4 +135,27 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         Message = "El registro ya existe."
     };
+
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetPagedAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+        return new ActionResponse<IEnumerable<T>>
+        {
+            IsSuccess = true,
+            Result = await queryable
+                .Paginate(pagination)
+                .ToListAsync()
+        };
+    }
+
+    public virtual async Task<ActionResponse<int>> GetCountAsync(PaginationDTO pagination)
+    {
+        var queryable = _entity.AsQueryable();
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            IsSuccess = true,
+            Result = (int)count
+        };
+    }
 }

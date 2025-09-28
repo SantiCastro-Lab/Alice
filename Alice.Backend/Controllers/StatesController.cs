@@ -1,4 +1,5 @@
 ﻿using Alice.Backend.UnitOfWork.Interfaces;
+using Alice.Shared.DTOs;
 using Alice.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,28 @@ namespace Alice.Backend.Controllers
                 return Ok(response.Result);
             }
             return NotFound(response.Message);
+        }
+        
+        [HttpGet("paginated")]
+        public override async Task<IActionResult> GetPagedAsync([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _statesUnitOfWork.GetPagedAsync(pagination);
+            if (response.IsSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest(response.Message);
+        }
+
+        [HttpGet("count")]
+        public override async Task<IActionResult> GetCountAsync([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _statesUnitOfWork.GetCountAsync(pagination);
+            if (response.IsSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest(response.Message);
         }
     }
 }

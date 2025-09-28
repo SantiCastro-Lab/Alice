@@ -1,4 +1,5 @@
 ﻿using Alice.Backend.UnitOfWork.Interfaces;
+using Alice.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Alice.Backend.Controllers;
@@ -32,6 +33,28 @@ public class GenericController<T> : Controller where T : class
             return Ok(response.Result);
         }
         return NotFound(response.Message);
+    }
+
+    [HttpGet("paginated")]
+    public virtual async Task<IActionResult> GetPagedAsync([FromQuery] PaginationDTO pagination)
+    {
+        var response = await _unitOfWork.GetPagedAsync(pagination);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return BadRequest(response.Message);
+    }
+
+    [HttpGet("count")]
+    public virtual async Task<IActionResult> GetCountAsync([FromQuery] PaginationDTO pagination)
+    {
+        var response = await _unitOfWork.GetCountAsync(pagination);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Result);
+        }
+        return BadRequest(response.Message);
     }
 
     [HttpPost]
